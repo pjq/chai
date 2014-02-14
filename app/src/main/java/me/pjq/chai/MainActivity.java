@@ -160,7 +160,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private String shareFileName = ScreenshotUtils.getshotFilePathByDay();
 
     private void showShare() {
-        final String text = placeholderFragment.getText();
+        final String text = placeholderFragment.getConvertedText();
         takeScreenshot();
         Utils.share(MainActivity.this, MainActivity.this.getString(R.string.app_name), text, shareFileName);
     }
