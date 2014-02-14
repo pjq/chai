@@ -1,0 +1,70 @@
+apply plugin: 'android'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.6.+'
+    }
+}
+apply plugin: 'android'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'com.android.support:appcompat-v7:19.0.0'
+    compile 'com.android.support:support-v4:19.0.0'
+    compile fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+    compile project(':libraries:wechat_sdk_sample_android')
+
+    compile files(
+            'libs/libGoogleAnalyticsServicesV3.jar',
+    )
+}
+
+android {
+    compileSdkVersion 19
+    buildToolsVersion "19.0.0"
+
+    defaultConfig {
+        versionName "1.0.0"
+        versionCode 1
+        minSdkVersion 8
+        targetSdkVersion 19
+        packageName "me.pjq.chai"
+    }
+
+    signingConfigs {
+        releaseConfig {
+            storeFile file("pushup.keystore")
+            storePassword "pjq.me"
+            keyAlias "PushUp"
+            keyPassword "pjq.me"
+        }
+    }
+
+    buildTypes {
+        release {
+            runProguard true
+            proguardFile 'proguard-android-optimize.txt'
+            signingConfig signingConfigs.releaseConfig
+        }
+
+        debug {
+            runProguard false
+            proguardFile 'proguard-android-optimize.txt'
+            signingConfig signingConfigs.releaseConfig
+        }
+    }
+
+    productFlavors {
+        chai{
+            packageName "me.pjq.chai"
+        }
+    }
+}
+
+
