@@ -17,5 +17,6 @@
     <string name="app_detail">Chai is a simple application used anti-censorship for text input.It will convert the origin text to the obfuscated text, but still keep it as readable. \n\nThe Android version is developed by pengjianqing@gmail.com \n\nPlease visit the official web site to get more information.</string>
     <string name="app_url">http://pjq.me</string>
     <string name="convert">Convert</string>
+    <string name="input_characters">Please input Chinese characters</string>
 
 </resources>

@@ -56,7 +56,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
 
         if (weChatUtils.getIWXAPI().isWXAppInstalled()) {
             getMenuInflater().inflate(R.menu.main_wechat, menu);
