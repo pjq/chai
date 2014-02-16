@@ -1,4 +1,4 @@
-package me.pjq.pushup;
+package me.pjq.chai;
 
 public enum ApplicationConfig implements MyApplicationConfigInterface {
     INSTANCE;

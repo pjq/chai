@@ -39,9 +39,9 @@ android {
 
     signingConfigs {
         releaseConfig {
-            storeFile file("pushup.keystore")
+            storeFile file("chai.keystore")
             storePassword "pjq.me"
-            keyAlias "PushUp"
+            keyAlias "Chai"
             keyPassword "pjq.me"
         }
     }

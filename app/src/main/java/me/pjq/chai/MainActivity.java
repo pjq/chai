@@ -3,7 +3,6 @@ package me.pjq.chai;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -26,7 +24,7 @@ import me.pjq.chai.utils.WeChatUtils;
 public class MainActivity extends ActionBarActivity implements View.OnClickListener, IWXAPIEventHandler {
     WeChatUtils weChatUtils;
 
-    PlaceholderFragment placeholderFragment;
+    DashboardFragment dashboardFragment;
 
 
     @Override
@@ -35,10 +33,12 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         if (savedInstanceState == null) {
-            placeholderFragment = new PlaceholderFragment();
+            dashboardFragment = new DashboardFragment();
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, placeholderFragment)
+                    .add(R.id.container, dashboardFragment, DashboardFragment.TAG)
                     .commit();
+        } else {
+            dashboardFragment = (DashboardFragment) getSupportFragmentManager().findFragmentByTag(DashboardFragment.TAG);
         }
 
         initWeChat();
@@ -112,12 +112,14 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public static class DashboardFragment extends Fragment {
+        public static final String TAG = DashboardFragment.class.getSimpleName();
+
         private EditText input;
         private Button convert;
         private TextView result;
 
-        public PlaceholderFragment() {
+        public DashboardFragment() {
         }
 
         @Override
@@ -159,13 +161,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private String shareFileName = ScreenshotUtils.getshotFilePathByDay();
 
     private void showShare() {
-        final String text = placeholderFragment.getConvertedText();
+        final String text = dashboardFragment.getConvertedText();
         takeScreenshot();
         Utils.share(MainActivity.this, MainActivity.this.getString(R.string.app_name), text, shareFileName);
     }
 
     private void showShareWeChat() {
-        final String text = placeholderFragment.getConvertedText();
+        final String text = dashboardFragment.getConvertedText();
         Bitmap bitmap = ScreenshotUtils.shotBitmap2(this, shareFileName);
         weChatUtils.createAppendReq(bitmap, this.getString(R.string.app_name), text, shareFileName);
 
@@ -177,7 +179,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     }
 
     private void sendToWeChat() {
-        final String text = placeholderFragment.getConvertedText();
+        final String text = dashboardFragment.getConvertedText();
         ScreenshotUtils.shotBitmap2(this, shareFileName);
         weChatUtils.createAppendReq2(this.getString(R.string.app_name), text, shareFileName);
 
