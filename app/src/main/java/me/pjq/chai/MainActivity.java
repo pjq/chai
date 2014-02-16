@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.tencent.mm.sdk.openapi.BaseReq;
 import com.tencent.mm.sdk.openapi.BaseResp;
@@ -146,6 +147,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             });
         }
 
+        public Button getConvertButton() {
+            return convert;
+        }
+
         public String getText() {
             return input.getText().toString();
         }
@@ -194,7 +199,11 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                ScreenshotUtils.shotBitmap(MainActivity.this, shareFileName);
+                Button convert = dashboardFragment.getConvertButton();
+                int y = convert.getTop() + convert.getHeight();
+
+//                ScreenshotUtils.shotBitmap(MainActivity.this, shareFileName, (int)y);
+                ScreenshotUtils.drawTextToBitmap(MainActivity.this, shareFileName, dashboardFragment.getConvertedText());
             }
         });
     }

@@ -5,10 +5,14 @@ package me.pjq.chai.utils;
  */
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.Rect;
+import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.*;
 import android.view.View;
 import me.pjq.chai.LocalPathResolver;
+import me.pjq.chai.MyApplication;
+import me.pjq.chai.R;
+import net.sourceforge.simcpux.Util;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,7 +24,7 @@ public class ScreenshotUtils {
      * @param pActivity
      * @return bitmap
      */
-    public static Bitmap takeScreenShot(Activity pActivity) {
+    public static Bitmap takeScreenShot(Activity pActivity, int excludeTop) {
         Bitmap bitmap = null;
         View view = pActivity.getWindow().getDecorView();
         view.setDrawingCacheEnabled(true);
@@ -29,14 +33,21 @@ public class ScreenshotUtils {
 
         Rect frame = new Rect();
         view.getWindowVisibleDisplayFrame(frame);
-        int stautsHeight = frame.top;
-        //stautsHeight = 0;
+
+        int stautsHeight = excludeTop;
+        if (excludeTop <= 0) {
+            stautsHeight = frame.top;
+        }
 
         int width = pActivity.getWindowManager().getDefaultDisplay().getWidth();
         int height = pActivity.getWindowManager().getDefaultDisplay().getHeight();
         bitmap = Bitmap.createBitmap(bitmap, 0, stautsHeight, width, height - stautsHeight);
         view.setDrawingCacheEnabled(false);
         return bitmap;
+    }
+
+    public static Bitmap takeScreenShot(Activity pActivity) {
+        return takeScreenShot(pActivity, 0);
     }
 
 
@@ -87,13 +98,142 @@ public class ScreenshotUtils {
     /**
      * @param pActivity
      */
-    public static boolean shotBitmap(Activity pActivity, String filePath) {
-        return ScreenshotUtils.savePic(takeScreenShot(pActivity), filePath);
+    public static boolean shotBitmap(Activity pActivity, String filePath, int excludeTopHeight) {
+        return ScreenshotUtils.savePic(takeScreenShot(pActivity, excludeTopHeight), filePath);
     }
 
     public static Bitmap shotBitmap2(Activity pActivity, String filePath) {
         Bitmap bitmap = takeScreenShot(pActivity);
         ScreenshotUtils.savePic(bitmap, filePath);
         return bitmap;
+    }
+
+
+    /**
+     * @param pActivity
+     */
+    public static boolean drawTextToBitmap(Activity pActivity, String filePath, String text) {
+        //return ScreenshotUtils.savePic(drawTextToBitmap(pActivity, R.drawable.bg, text), filePath);
+        return ScreenshotUtils.savePic(drawText(pActivity, R.drawable.bg, text), filePath);
+    }
+
+    public static Bitmap drawTextToBitmap(Context gContext,
+                                          int gResId,
+                                          String gText) {
+        Resources resources = gContext.getResources();
+        float scale = resources.getDisplayMetrics().density;
+        Bitmap bitmap =
+                BitmapFactory.decodeResource(resources, gResId);
+
+        android.graphics.Bitmap.Config bitmapConfig =
+                bitmap.getConfig();
+        // set default bitmap config if none
+        if (bitmapConfig == null) {
+            bitmapConfig = android.graphics.Bitmap.Config.ARGB_8888;
+        }
+        // resource bitmaps are imutable,
+        // so we need to convert it to mutable one
+        bitmap = bitmap.copy(bitmapConfig, true);
+
+        Canvas canvas = new Canvas(bitmap);
+        // new antialised Paint
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        // text color - #3D3D3D
+        paint.setColor(Color.rgb(61, 61, 61));
+        // text size in pixels
+        paint.setTextSize((int) (14 * scale));
+        // text shadow
+        paint.setShadowLayer(1f, 0f, 1f, Color.WHITE);
+
+        // draw text to the Canvas center
+        Rect bounds = new Rect();
+        paint.getTextBounds(gText, 0, gText.length(), bounds);
+        int x = 10;
+        int y = bounds.height();
+
+        canvas.drawText(gText, x, y, paint);
+
+        return bitmap;
+    }
+
+    public static Bitmap drawText(Context gContext, int gResId, String gText) {
+        Resources resources = gContext.getResources();
+        float scale = resources.getDisplayMetrics().density;
+        Bitmap bitmap =
+                BitmapFactory.decodeResource(resources, gResId);
+
+        android.graphics.Bitmap.Config bitmapConfig =
+                bitmap.getConfig();
+        // set default bitmap config if none
+        if (bitmapConfig == null) {
+            bitmapConfig = android.graphics.Bitmap.Config.ARGB_8888;
+        }
+        // resource bitmaps are imutable,
+        // so we need to convert it to mutable one
+        bitmap = bitmap.copy(bitmapConfig, true);
+
+        Canvas canvas = new Canvas(bitmap);
+        // new antialised Paint
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        // text color - #3D3D3D
+        paint.setColor(resources.getColor(R.color.text_black_color));
+        // text size in pixels
+        float fontSize = Utils.dpToPixels(MyApplication.getContext(), 12);
+
+        paint.setTextSize((int) (fontSize));
+        // text shadow
+        //paint.setShadowLayer(1f, 0f, 1f, Color.WHITE);
+
+        // draw text to the Canvas center
+        Rect bounds = new Rect();
+        //paint.getTextBounds(gText, 0, gText.length(), bounds);
+        bounds.set(0, 0, bitmap.getWidth() - 15, bitmap.getHeight() - 10);
+
+        drawMultilineText(gText, 10, 30, paint, canvas, (int) fontSize, bounds);
+
+        return bitmap;
+    }
+
+    private static void drawMultilineText(String str, int x, int y, Paint paint, Canvas canvas, int fontSize, Rect drawSpace) {
+        int lineHeight = 0;
+        int yoffset = 0;
+        String[] lines = str.split("");
+
+        // set height of each line (height of text + 20%)
+        float scale = 1.1f;
+        lineHeight = (int) (calculateHeightFromFontSize(str, fontSize) * scale);
+        // draw each line
+        String line = "";
+        for (int i = 0; i < lines.length; ++i) {
+
+            if (calculateWidthFromFontSize(line + "" + lines[i], fontSize) <= drawSpace.width()) {
+                line = line + "" + lines[i];
+
+            } else {
+                canvas.drawText(line, x, y + yoffset, paint);
+                yoffset = yoffset + lineHeight;
+                line = lines[i];
+            }
+        }
+        canvas.drawText(line, x, y + yoffset, paint);
+    }
+
+    private static int calculateWidthFromFontSize(String testString, int currentSize) {
+        Rect bounds = new Rect();
+        Paint paint = new Paint();
+        paint.setTextSize(currentSize);
+        paint.getTextBounds(testString, 0, testString.length(), bounds);
+        int value = (int) Math.ceil(bounds.width());
+
+        return value;
+    }
+
+    private static int calculateHeightFromFontSize(String testString, int currentSize) {
+        Rect bounds = new Rect();
+        Paint paint = new Paint();
+        paint.setTextSize(currentSize);
+        paint.getTextBounds(testString, 0, testString.length(), bounds);
+
+        return (int) Math.ceil(bounds.height());
     }
 }
