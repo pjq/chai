@@ -192,8 +192,6 @@ public class ScreenshotUtils {
     public static Bitmap text2Bitmap(Context gContext, int gResId, String gText) {
         Resources resources = gContext.getResources();
 
-        Canvas canvas = new Canvas();
-        canvas.drawColor(resources.getColor(R.color.bg_color_light_grey));
         // new antialised Paint
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(resources.getColor(R.color.text_black_color));
@@ -204,11 +202,12 @@ public class ScreenshotUtils {
         int width = (int) (MyApplication.mScreenWidth * 0.7f);
         int bottomPadding = 15;
         int topPadding = 40;
-        int height = getMultilineTextHeight(gText, 10, topPadding, paint, canvas, (int) fontSize, width) + bottomPadding;
+        int height = getMultilineTextHeight(gText, 10, topPadding, paint, (int) fontSize, width) + bottomPadding;
         bounds.set(0, 0, width - 15, height - 10);
         Bitmap bitmap = Bitmap.createBitmap(width, height, android.graphics.Bitmap.Config.ARGB_8888);
 
-        canvas.setBitmap(bitmap);
+        Canvas canvas = new Canvas(bitmap);
+        canvas.drawColor(resources.getColor(R.color.holo_green_light));
 
         drawMultilineText(gText, 10, topPadding, paint, canvas, (int) fontSize, bounds);
 
@@ -238,7 +237,7 @@ public class ScreenshotUtils {
         canvas.drawText(line, x, y + yoffset, paint);
     }
 
-    private static int getMultilineTextHeight(String str, int x, int y, Paint paint, Canvas canvas, int fontSize, int width) {
+    private static int getMultilineTextHeight(String str, int x, int y, Paint paint, int fontSize, int width) {
         int lineHeight = 0;
         int yoffset = 0;
         String[] lines = str.split("");
@@ -252,7 +251,6 @@ public class ScreenshotUtils {
             if (calculateWidthFromFontSize(line + "" + lines[i], fontSize) <= width) {
                 line = line + "" + lines[i];
             } else {
-                canvas.drawText(line, x, y + yoffset, paint);
                 yoffset = yoffset + lineHeight;
                 line = lines[i];
             }
