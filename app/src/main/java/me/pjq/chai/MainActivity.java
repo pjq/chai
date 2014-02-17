@@ -23,9 +23,11 @@ import me.pjq.chai.utils.Utils;
 import me.pjq.chai.utils.WeChatUtils;
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener, IWXAPIEventHandler {
-    WeChatUtils weChatUtils;
+    private static final String TAG = MainActivity.class.getSimpleName();
 
-    DashboardFragment dashboardFragment;
+    private WeChatUtils weChatUtils;
+
+    private DashboardFragment dashboardFragment;
 
 
     @Override
@@ -97,11 +99,12 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     @Override
     public void onReq(BaseReq baseReq) {
-
+        EFLogger.i(TAG, baseReq.toString());
     }
 
     @Override
     public void onResp(BaseResp baseResp) {
+        EFLogger.i(TAG, baseResp.toString());
 
     }
 
@@ -173,7 +176,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     private void showShareWeChat() {
         final String text = dashboardFragment.getConvertedText();
-        Bitmap bitmap = ScreenshotUtils.shotBitmap2(this, shareFileName);
+//        Bitmap bitmap = ScreenshotUtils.shotBitmap2(this, shareFileName);
+        Bitmap bitmap = ScreenshotUtils.text2Bitmap(getApplicationContext(), text);
+        ScreenshotUtils.savePic(bitmap, shareFileName);
+
         weChatUtils.createAppendReq(bitmap, this.getString(R.string.app_name), text, shareFileName);
 
         Intent intent = new Intent();

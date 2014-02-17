@@ -54,7 +54,7 @@ public class ScreenshotUtils {
     /**
      * @param pBitmap
      */
-    private static boolean savePic(Bitmap pBitmap, String strName) {
+    public static boolean savePic(Bitmap pBitmap, String strName) {
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(strName);
@@ -115,7 +115,7 @@ public class ScreenshotUtils {
     public static boolean drawTextToBitmap(Activity pActivity, String filePath, String text) {
         //return ScreenshotUtils.savePic(drawTextToBitmap(pActivity, R.drawable.bg, text), filePath);
         //return ScreenshotUtils.savePic(drawText(pActivity, R.drawable.bg_grey, text), filePath);
-        return ScreenshotUtils.savePic(text2Bitmap(pActivity, R.drawable.bg_grey, text), filePath);
+        return ScreenshotUtils.savePic(text2Bitmap(pActivity, text), filePath);
     }
 
     public static Bitmap drawTextToBitmap(Context gContext,
@@ -189,7 +189,7 @@ public class ScreenshotUtils {
         return bitmap;
     }
 
-    public static Bitmap text2Bitmap(Context gContext, int gResId, String gText) {
+    public static Bitmap text2Bitmap(Context gContext, String gText) {
         Resources resources = gContext.getResources();
 
         // new antialised Paint
