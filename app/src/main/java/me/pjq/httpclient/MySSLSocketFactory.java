@@ -81,9 +81,6 @@ import javax.net.ssl.X509TrustManager;
  * 
  * </p>
  * 
- * @author 姓名：pengjianqing 工号：018577 公司：盛大文学云中书城 部门：技术开发部
- * @since 2011.9.25
- * @version 1.0 ©2011,盛大网络
  *****************************************/
 public class MySSLSocketFactory extends SSLSocketFactory {
 	SSLContext sslContext = SSLContext.getInstance("TLS");
