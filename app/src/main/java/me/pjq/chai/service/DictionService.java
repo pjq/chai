@@ -4,11 +4,9 @@ import android.text.TextUtils;
 import me.pjq.chai.EFLogger;
 import me.pjq.chai.MyApplication;
 import me.pjq.chai.ServiceProvider;
+import me.pjq.httpclient.WordListUpdater;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.HashMap;
 
 /**
@@ -27,6 +25,11 @@ public class DictionService {
         if (null == dictions) {
             parser();
         }
+    }
+
+    public void updateFromServer() {
+        WordListUpdater wordListUpdater = new WordListUpdater();
+        wordListUpdater.updateFromServer();
     }
 
 
@@ -77,7 +80,15 @@ public class DictionService {
                 HashMap<String, String> hashMap = null;
                 String path = WORDS_PATH;
                 try {
-                    InputStream inputStream = MyApplication.getContext().getAssets().open(path);
+                    InputStream inputStream = null;
+                    if (WordListUpdater.isWordListCached()) {
+                        String cachePath = WordListUpdater.getWordlistCachePath();
+                        EFLogger.i(TAG, cachePath + " is already cached locally.");
+                        inputStream = new FileInputStream(new File(cachePath));
+                    } else {
+                        inputStream = MyApplication.getContext().getAssets().open(path);
+                    }
+
                     InputStreamReader isr = new InputStreamReader(inputStream);
                     BufferedReader rd = new BufferedReader(isr);
                     String line = "";

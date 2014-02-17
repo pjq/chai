@@ -45,7 +45,7 @@ public class MyApplication extends Application {
 
         getSystemParasmeter();
 
-        DictionService.getInstance();
+        DictionService.getInstance().updateFromServer();
     }
 
 

@@ -14,4 +14,8 @@ public enum ApplicationConfig implements MyApplicationConfigInterface {
     public boolean API_DEV() {
         return false;
     }
+
+    public boolean UPDATE_WORDLIST_FROM_SERVER() {
+        return true;
+    }
 }

@@ -10,4 +10,6 @@ public interface MyApplicationConfigInterface {
     public boolean DEBUG_LOG();
 
     public boolean API_DEV();
+
+    public boolean UPDATE_WORDLIST_FROM_SERVER();
 }

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Chai</string>
-    <string name="just_push_up">Just Push Up!</string>
-    <string name="provider_authorities">pushup</string>
-    <string name="PREFIX_DIR">/Pooshup</string>
+    <string name="provider_authorities">chai</string>
+    <string name="PREFIX_DIR">/Chai</string>
 </resources>

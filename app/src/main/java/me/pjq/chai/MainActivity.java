@@ -77,6 +77,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         int id = item.getItemId();
         if (id == R.id.action_about) {
             Utils.showAbout(this);
+
+            if (ApplicationConfig.INSTANCE.DEBUG()){
+                DictionService.getInstance().updateFromServer();
+            }
         } else if (id == R.id.action_share) {
             showShare();
         } else if (id == R.id.action_share_wechat) {
