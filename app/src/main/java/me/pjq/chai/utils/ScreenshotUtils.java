@@ -217,7 +217,7 @@ public class ScreenshotUtils {
     private static void drawMultilineText(String str, int x, int y, Paint paint, Canvas canvas, int fontSize, Rect drawSpace) {
         int lineHeight = 0;
         int yoffset = 0;
-        String[] lines = str.split("");
+®        String[] lines = str.split("");
 
         // set height of each line (height of text + 20%)
         float scale = 1.1f;

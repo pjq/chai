@@ -2,6 +2,7 @@ package me.pjq.chai;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -22,6 +23,9 @@ import me.pjq.chai.utils.ScreenshotUtils;
 import me.pjq.chai.utils.Utils;
 import me.pjq.chai.utils.WeChatUtils;
 
+import java.util.ArrayList;
+import java.util.Date;
+
 public class MainActivity extends ActionBarActivity implements View.OnClickListener, IWXAPIEventHandler {
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -36,7 +40,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         if (savedInstanceState == null) {
-            dashboardFragment = new DashboardFragment();
+            dashboardFragment = DashboardFragment.createFragment("");
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, dashboardFragment, DashboardFragment.TAG)
                     .commit();
@@ -47,6 +51,57 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         initWeChat();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        handleExtraIntent();
+    }
+
+    private void handleExtraIntent() {
+        // Get intent, action and MIME type
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        String type = intent.getType();
+
+        if (Intent.ACTION_SEND.equals(action) && type != null) {
+            if ("text/plain".equals(type)) {
+                handleSendText(intent); // Handle text being sent
+            } else if (type.startsWith("image/")) {
+                handleSendImage(intent); // Handle single image being sent
+            }
+        } else if (Intent.ACTION_SEND_MULTIPLE.equals(action) && type != null) {
+            if (type.startsWith("image/")) {
+                handleSendMultipleImages(intent); // Handle multiple images being sent
+            }
+        } else {
+            // Handle other intents, such as being started from the home screen
+        }
+    }
+
+    void handleSendText(Intent intent) {
+        String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
+        if (sharedText != null) {
+            // Update UI to reflect text being shared
+            EditText input = dashboardFragment.getInputEditText();
+
+            input.setText(sharedText);
+        }
+    }
+
+    void handleSendImage(Intent intent) {
+        Uri imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
+        if (imageUri != null) {
+            // Update UI to reflect image being shared
+        }
+    }
+
+    void handleSendMultipleImages(Intent intent) {
+        ArrayList<Uri> imageUris = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
+        if (imageUris != null) {
+            // Update UI to reflect multiple images being shared
+        }
+    }
 
     private void initWeChat() {
         weChatUtils = WeChatUtils.getInstance(this);
@@ -78,7 +133,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         if (id == R.id.action_about) {
             Utils.showAbout(this);
 
-            if (ApplicationConfig.INSTANCE.DEBUG()){
+            if (ApplicationConfig.INSTANCE.DEBUG()) {
                 DictionService.getInstance().updateFromServer();
             }
         } else if (id == R.id.action_share) {
@@ -98,6 +153,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         super.onNewIntent(intent);
 
         setIntent(intent);
+        handleExtraIntent();
+
         weChatUtils.getIWXAPI().handleIntent(intent, this);
     }
 
@@ -127,7 +184,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         private Button convert;
         private TextView result;
 
-        public DashboardFragment() {
+        public static DashboardFragment createFragment(String string){
+            DashboardFragment fragment = new DashboardFragment();
+
+            Bundle bundle = new Bundle();bundle.putString("TEXT", string);
+            fragment.setArguments(bundle);
+
+            return fragment;
         }
 
         @Override
@@ -143,6 +206,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             input = (EditText) container.findViewById(R.id.input);
             convert = (Button) container.findViewById(R.id.convert);
             result = (TextView) container.findViewById(R.id.result);
+
+            Bundle bundle = getArguments();
+            String text = bundle.getString("TEXT");
+            input.setText(text);
 
             convert.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -166,6 +233,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             String inputString = input.getText().toString();
             String outputString = DictionService.getInstance().convert(inputString);
             return outputString;
+        }
+
+        public EditText getInputEditText() {
+            return input;
         }
     }
 
