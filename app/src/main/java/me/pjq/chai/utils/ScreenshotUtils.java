@@ -226,13 +226,21 @@ public class ScreenshotUtils {
         String line = "";
         for (int i = 0; i < lines.length; ++i) {
 
-            if (calculateWidthFromFontSize(line + "" + lines[i], fontSize) <= drawSpace.width()) {
-                line = line + "" + lines[i];
-            } else {
+            if (calculateWidthFromFontSize(line + "" + lines[i], fontSize) > drawSpace.width()||(lines[i].equalsIgnoreCase("\n"))) {
                 canvas.drawText(line, x, y + yoffset, paint);
                 yoffset = yoffset + lineHeight;
                 line = lines[i];
+            }else {
+                line = line + "" + lines[i];
             }
+
+//            if (calculateWidthFromFontSize(line + "" + lines[i], fontSize) <= drawSpace.width()||!(lines[i].equalsIgnoreCase("\n"))) {
+//                line = line + "" + lines[i];
+//            } else {
+//                canvas.drawText(line, x, y + yoffset, paint);
+//                yoffset = yoffset + lineHeight;
+//                line = lines[i];
+//            }
         }
         canvas.drawText(line, x, y + yoffset, paint);
     }
@@ -248,15 +256,21 @@ public class ScreenshotUtils {
         // draw each line
         String line = "";
         for (int i = 0; i < lines.length; ++i) {
-            if (calculateWidthFromFontSize(line + "" + lines[i], fontSize) <= width) {
-                line = line + "" + lines[i];
-            } else {
+            if (calculateWidthFromFontSize(line + "" + lines[i], fontSize) > width||(lines[i].equalsIgnoreCase("\n"))) {
                 yoffset = yoffset + lineHeight;
                 line = lines[i];
+            }else {
+                line = line + "" + lines[i];
             }
+//            if (calculateWidthFromFontSize(line + "" + lines[i], fontSize) <= width||!(lines[i].equalsIgnoreCase("\n"))) {
+//                line = line + "" + lines[i];
+//            } else {
+//                yoffset = yoffset + lineHeight;
+//                line = lines[i];
+//            }
         }
 
-        return y + yoffset + lineHeight;
+        return y + yoffset + lineHeight*2;
     }
 
     private static int calculateWidthFromFontSize(String testString, int currentSize) {

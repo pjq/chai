@@ -17,6 +17,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:minLines="5"
+        android:maxLines="5"
         android:hint="@string/input_characters"
         android:gravity="start"
         />
@@ -25,17 +26,21 @@
         android:id="@+id/convert"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dip"
+        android:layout_marginTop="15dip"
+        android:layout_marginBottom="15dip"
         android:text="@string/convert"
         style="@style/MMLineActionButton"
         />
 
-    <TextView
-        android:id="@+id/result"
-        android:layout_marginTop="20dip"
+    <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        style="@style/AboutDetailStyle"
-        />
-
+        >
+        <TextView
+            android:id="@+id/result"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            style="@style/AboutDetailStyle"
+            />
+    </ScrollView>
 </LinearLayout>

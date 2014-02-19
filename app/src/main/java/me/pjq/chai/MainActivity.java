@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -183,6 +184,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         private EditText input;
         private Button convert;
         private TextView result;
+        private boolean converted = false;
 
         public static DashboardFragment createFragment(String string){
             DashboardFragment fragment = new DashboardFragment();
@@ -214,9 +216,18 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             convert.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String outputString = getConvertedText();
 
-                    result.setText(outputString);
+                    if (!converted){
+                        String outputString = getConvertedText();
+                        result.setText(outputString);
+                        convert.setText(getString(R.string.unconvert));
+                    }else {
+                        result.setText(getText());
+                        convert.setText(getString(R.string.convert));
+
+                    }
+
+                    converted = !converted;
                 }
             });
         }
@@ -235,6 +246,16 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             return outputString;
         }
 
+        public String getResultText() {
+           String text = result.getText().toString();
+
+            if (TextUtils.isEmpty(text)){
+                text = getText();
+            }
+
+            return text;
+        }
+
         public EditText getInputEditText() {
             return input;
         }
@@ -244,13 +265,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private String shareFileName = ScreenshotUtils.getshotFilePathByDay();
 
     private void showShare() {
-        final String text = dashboardFragment.getConvertedText();
+        final String text = dashboardFragment.getResultText();
         takeScreenshot();
         Utils.share(MainActivity.this, MainActivity.this.getString(R.string.app_name), text, shareFileName);
     }
 
     private void showShareWeChat() {
-        final String text = dashboardFragment.getConvertedText();
+        final String text = dashboardFragment.getResultText();
 //        Bitmap bitmap = ScreenshotUtils.shotBitmap2(this, shareFileName);
         Bitmap bitmap = ScreenshotUtils.text2Bitmap(getApplicationContext(), text);
         ScreenshotUtils.savePic(bitmap, shareFileName);
@@ -265,7 +286,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     }
 
     private void sendToWeChat() {
-        final String text = dashboardFragment.getConvertedText();
+        final String text = dashboardFragment.getResultText();
         ScreenshotUtils.shotBitmap2(this, shareFileName);
         weChatUtils.createAppendReq2(this.getString(R.string.app_name), text, shareFileName);
 

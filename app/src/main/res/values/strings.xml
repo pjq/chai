@@ -19,5 +19,6 @@
     <string name="wordlist_url">https://raw2.github.com/pjq/chai/master/app/src/main/assets/word.list</string>
     <string name="convert">Convert</string>
     <string name="input_characters">Please input Chinese characters</string>
+    <string name="unconvert">Recover</string>
 
 </resources>
