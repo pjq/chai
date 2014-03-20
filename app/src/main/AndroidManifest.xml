@@ -53,11 +53,7 @@
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light"
-            android:parentActivityName="me.pjq.chai.MainActivity"
             >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="me.pjq.pushup.navigation.MainActivity"/>
         </activity>
         <activity
             android:name="me.pjq.chai.activity.UserGuideActivity"

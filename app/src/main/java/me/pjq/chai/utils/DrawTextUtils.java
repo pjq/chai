@@ -97,7 +97,7 @@ public class DrawTextUtils {
     }
 
     public static Bitmap text2BitmapWithLogo(Context context, String text) {
-        return text2Bitmap(context, text, R.drawable.pjq_me_72);
+        return text2Bitmap(context, text, R.drawable.pjq_me_144);
     }
 
     public static Bitmap text2Bitmap(Context context, String text) {

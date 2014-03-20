@@ -55,15 +55,33 @@
             android:autoLink="all"
             />
 
-        <TextView
-            android:id="@+id/app_url"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:text="@string/app_url"
-            android:layout_marginTop="10dip"
+        <RelativeLayout
             android:layout_below="@id/app_detail"
-            style="@style/AboutDetailStyle"
-            />
+            android:layout_width="fill_parent"
+            android:layout_marginTop="10dip"
+            android:layout_marginLeft="15dip"
+            android:layout_marginRight="15dip"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/pjq_me_144"
+                />
+
+            <TextView
+                android:id="@+id/app_url"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_url"
+                android:layout_toRightOf="@id/logo"
+                android:layout_marginLeft="10dip"
+                android:layout_centerVertical="true"
+                style="@style/AboutDetailStyle"
+                />
+
+        </RelativeLayout>
+
     </RelativeLayout>
 </ScrollView>

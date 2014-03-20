@@ -9,19 +9,18 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBar;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.*;
 import android.widget.ProgressBar;
 import me.pjq.chai.BaseActionBarActivity;
 import me.pjq.chai.EFLogger;
 import me.pjq.chai.R;
+import me.pjq.chai.utils.Utils;
 
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by kicoolzhang on 7/26/13.
- */
 public abstract class WebViewActivity extends BaseActionBarActivity {
     protected static String TAG = WebViewActivity.class.getSimpleName();
     public static final String KEY_URL = "url";
@@ -181,4 +180,14 @@ public abstract class WebViewActivity extends BaseActionBarActivity {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId()== R.id.home){
+            finish();
+            Utils.overridePendingTransitionLeft2Right(WebViewActivity.this);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }

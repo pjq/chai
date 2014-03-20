@@ -6,6 +6,7 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.URLSpan;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import me.pjq.chai.BaseActionBarActivity;
 import me.pjq.chai.R;
@@ -16,6 +17,7 @@ public class AboutActivity extends BaseActionBarActivity {
     private TextView appName;
     private TextView appVersion;
     private TextView appDetail;
+    private ImageView logo;
 
 
     @Override
@@ -36,6 +38,7 @@ public class AboutActivity extends BaseActionBarActivity {
         appName = (TextView) findViewById(R.id.app_name);
         appVersion = (TextView) findViewById(R.id.app_version);
         appDetail = (TextView) findViewById(R.id.app_detail);
+        logo = (ImageView) findViewById(R.id.logo);
 
         appVersion.setText(Utils.getApplicationVersionName(getApplicationContext()) + "." + Utils.getApplicationVersionCode(getApplicationContext()));
 
@@ -44,13 +47,16 @@ public class AboutActivity extends BaseActionBarActivity {
         SpannableString sp = new SpannableString(url);
         sp.setSpan(new URLSpan(url), 0, url.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         appUrl.setText(sp);
-        appUrl.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener listener = new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 Utils.openUrlInsideApp(AboutActivity.this, getString(R.string.app_url));
                 Utils.overridePendingTransitionRight2Left(AboutActivity.this);
             }
-        });
+        };
+
+        appUrl.setOnClickListener(listener);
+        logo.setOnClickListener(listener);
     }
 }
