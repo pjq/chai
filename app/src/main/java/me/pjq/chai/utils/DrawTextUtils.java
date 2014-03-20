@@ -97,7 +97,7 @@ public class DrawTextUtils {
     }
 
     public static Bitmap text2BitmapWithLogo(Context context, String text) {
-        return text2Bitmap(context, text, R.drawable.pjq_me_144);
+        return text2Bitmap(context, text, R.drawable.pjq_me_72);
     }
 
     public static Bitmap text2Bitmap(Context context, String text) {
@@ -171,14 +171,6 @@ public class DrawTextUtils {
             } else {
                 line = line + "" + lines[i];
             }
-
-//            if (calculateWidthFromFontSize(line + "" + lines[i], fontSize) <= drawSpace.width()||!(lines[i].equalsIgnoreCase("\n"))) {
-//                line = line + "" + lines[i];
-//            } else {
-//                canvas.drawText(line, x, y + yoffset, paint);
-//                yoffset = yoffset + lineHeight;
-//                line = lines[i];
-//            }
         }
         canvas.drawText(line, x, y + yoffset, paint);
     }
@@ -208,7 +200,7 @@ public class DrawTextUtils {
             }
         }
 
-        return y + yoffset + lineHeight * 2;
+        return y + yoffset + lineHeight * 1;
     }
 
     private static int calculateWidthFromFontSize(String testString, int currentSize) {
