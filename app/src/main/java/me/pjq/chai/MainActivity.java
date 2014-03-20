@@ -20,6 +20,7 @@ import com.tencent.mm.sdk.openapi.BaseReq;
 import com.tencent.mm.sdk.openapi.BaseResp;
 import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
 import me.pjq.chai.service.DictionService;
+import me.pjq.chai.utils.DrawTextUtils;
 import me.pjq.chai.utils.ScreenshotUtils;
 import me.pjq.chai.utils.Utils;
 import me.pjq.chai.utils.WeChatUtils;
@@ -186,10 +187,11 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         private TextView result;
         private boolean converted = false;
 
-        public static DashboardFragment createFragment(String string){
+        public static DashboardFragment createFragment(String string) {
             DashboardFragment fragment = new DashboardFragment();
 
-            Bundle bundle = new Bundle();bundle.putString("TEXT", string);
+            Bundle bundle = new Bundle();
+            bundle.putString("TEXT", string);
             fragment.setArguments(bundle);
 
             return fragment;
@@ -217,11 +219,11 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 @Override
                 public void onClick(View v) {
 
-                    if (!converted){
+                    if (!converted) {
                         String outputString = getConvertedText();
                         result.setText(outputString);
                         convert.setText(getString(R.string.unconvert));
-                    }else {
+                    } else {
                         result.setText(getText());
                         convert.setText(getString(R.string.convert));
 
@@ -247,9 +249,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         }
 
         public String getResultText() {
-           String text = result.getText().toString();
+            String text = result.getText().toString();
 
-            if (TextUtils.isEmpty(text)){
+            if (TextUtils.isEmpty(text)) {
                 text = getText();
             }
 
@@ -273,7 +275,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private void showShareWeChat() {
         final String text = dashboardFragment.getResultText();
 //        Bitmap bitmap = ScreenshotUtils.shotBitmap2(this, shareFileName);
-        Bitmap bitmap = ScreenshotUtils.text2Bitmap(getApplicationContext(), text);
+        Bitmap bitmap = DrawTextUtils.text2BitmapWithLogo(getApplicationContext(), text);
         ScreenshotUtils.savePic(bitmap, shareFileName);
 
         weChatUtils.createAppendReq(bitmap, this.getString(R.string.app_name), text, shareFileName);
@@ -301,11 +303,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Button convert = dashboardFragment.getConvertButton();
-                int y = convert.getTop() + convert.getHeight();
-
-//                ScreenshotUtils.shotBitmap(MainActivity.this, shareFileName, (int)y);
-                ScreenshotUtils.drawTextToBitmap(MainActivity.this, shareFileName, dashboardFragment.getConvertedText());
+                DrawTextUtils.drawTextToBitmap(MainActivity.this, shareFileName, dashboardFragment.getResultText(), true);
             }
         });
     }
